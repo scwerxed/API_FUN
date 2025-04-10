@@ -1,39 +1,34 @@
-const smashCount = 0;
-const passCount = 0;
+fetch(`https://pokeapi.co/api/v2/pokemon/?offset=1&limit=10277`)
+    .then(res => {
+        return res.json()
+    })
+    .then((data) => {
+        console.log(data);
+        let pokeIndex = 0;
 
+        let smashCount = 0;
+        let passCount = 0;
 
-document.getElementById("startBtn").addEventListener("click", function () {
-        const smashBtn = document.getElementById("smashBtn");
-        const passBtn = document.getElementById("passBtn");
-        const response = fetch(`https://pokeapi.co/api/v2/pokemon/?offset=20&limit=20`)
-            .then(res => res.json())
-            .then((data) => {
-                    const pokeID = data.pokeID
+        const pokeName = document.getElementById("pokeName");
 
-                }
-            );
-
-
-        function showPoke(id) {
-            fetch(`https://dummyjson.com/products/${id}`)
-                .then(res => res.json())
-                .then(product => {
-                    if (smashBtn) {
-                        smashBtn++;
-                        fetch(`https://pokeapi.co/api/v2/pokemon/${pokeID}`)
-                        document.getElementById("pokemonImage").src = pokeID.image;
-                        document.getElementById("pokeName").innerText = pokeID.name;
-                        pokeID++;
-
-                    } else if (passBtn) {
-                        passCount++;
-                        fetch(`https://pokeapi.co/api/v2/pokemon/${pokeID}`)
-                        document.getElementById("pokemonImage").src = pokeID.image;
-                        document.getElementById("pokeName").innerText = pokeID.name;
-                        pokeID++;
-                    }
-                });
+        function updatePokemon() {
+            if (pokeIndex < data.results.length) {
+                pokeName.innerText = data.results[pokeIndex].name;
+                // document.getElementById("pokemonImage").src = getPokemonImage(data.results[pokeIndex].url);
+            } else {
+                pokeName.innerText = "No more Pokémon!";
+            }
         }
-    }
-)
 
+        document.getElementById("smash").addEventListener("click", () => {
+            updatePokemon();
+            smashCount++;
+            pokeIndex++;
+        })
+
+        document.getElementById("pass").addEventListener("click", () => {
+            updatePokemon();
+            passCount++;
+            pokeIndex++;
+        });
+    })
